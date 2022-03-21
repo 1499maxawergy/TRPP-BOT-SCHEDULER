@@ -2,6 +2,8 @@ import telebot
 
 import group_parser as pr
 
+pr.__init__()
+
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
 

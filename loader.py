@@ -9,4 +9,3 @@ def download(link):
 
 ikbo_2k = "https://webservices.mirea.ru/upload/iblock/25f/oxqk11pdd33p0p5sh9v2jvtc89gs76kw/ИИТ_2%20курс_21-22_" \
           "весна.xlsx "
-

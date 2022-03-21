@@ -28,6 +28,7 @@ def get_xlsx(group_name):
 
 # print_week - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
+    group_name = group_name.upper()
     if group_cell.get(group_name) is not None:
         answer = "```\n"
         excel_filename = get_xlsx(group_name)
@@ -37,15 +38,16 @@ def print_week(group_name, week):
             answer += sheet[day][0].value + '\n'
             for para in range(day + week, day + 12, 2):
                 if sheet[para][group_cell[group_name]].value is not None:
+                    answer += '№' + str(sheet[para][1].value) + '\t'
                     if sheet[para][1].value is not None:
-                        answer += str(sheet[para][1].value) + '\t'
                         answer += str(sheet[para][2].value) + '\t'
+                        answer += str(sheet[para][3].value) + '\n'
                     else:
-                        answer += str(sheet[para - 1][1].value) + '\t'
                         answer += str(sheet[para - 1][2].value) + '\t'
+                        answer += str(sheet[para - 1][3].value) + '\n'
 
-                    answer += str(sheet[para][group_cell[group_name]].value) + '\n'
-            answer += '\n'
+                    answer += str(sheet[para][group_cell[group_name]].value) + '\n\n'
+            answer += '\n\n'
 
         answer += "```"
         return answer

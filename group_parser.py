@@ -26,6 +26,12 @@ def get_xlsx(group_name):
         return None
 
 
+def is_group_exists(group_name):
+    if group_cell.get(group_name) is not None:
+        return True
+    return False
+
+
 # print_week - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
     group_name = group_name.upper()

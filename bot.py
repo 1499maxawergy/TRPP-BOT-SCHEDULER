@@ -1,11 +1,14 @@
 import telebot
 
+import group_parser as pr
+
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
 
 # Клавиатура бота
 keyboard = telebot.types.ReplyKeyboardMarkup(True)
 keyboard.row("/previous", "/next")
+
 
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
@@ -16,7 +19,8 @@ def start(m, res=False):
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
-    bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
+    # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
+    bot.send_message(message.chat.id, pr.print_week(message.text, 0))
 
 
 # Запускаем бота

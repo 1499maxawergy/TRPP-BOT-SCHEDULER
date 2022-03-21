@@ -41,7 +41,7 @@ def print_week(group_name, week):
         sheet = openpyxl.load_workbook(excel_filename).active
 
         for day in range(4, 64, 12):
-            answer += sheet[day][0].value + '\n'
+            answer += "🔥" + sheet[day][0].value + '\n'
             for para in range(day + week, day + 12, 2):
                 if sheet[para][group_cell[group_name]].value is not None:
                     answer += '№' + str(sheet[para][1].value) + '\t'

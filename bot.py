@@ -9,7 +9,7 @@ bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
 
 # Клавиатура бота
 keyboard = telebot.types.ReplyKeyboardMarkup(True)
-keyboard.row("/previous", "/next")
+keyboard.row("🔙", "🔝", "🔜")
 
 
 # Функция, обрабатывающая команду /start

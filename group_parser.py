@@ -29,7 +29,7 @@ def get_xlsx(group_name):
 # print_week - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
     if group_cell.get(group_name) is not None:
-        answer = "'''"
+        answer = "```"
         excel_filename = get_xlsx(group_name)
         sheet = openpyxl.load_workbook(excel_filename).active
 
@@ -47,7 +47,7 @@ def print_week(group_name, week):
                     answer += str(sheet[para][group_cell[group_name]].value) + '\n'
             answer += '\n'
 
-        answer += "'''"
+        answer += "```"
         return answer
     else:
         return "Ваша группа не найдена."

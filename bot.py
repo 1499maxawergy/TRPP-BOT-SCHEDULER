@@ -22,7 +22,7 @@ def start(m, res=False):
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
     # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
-    bot.send_message(message.chat.id, pr.print_week(message.text, 0))
+    bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')
 
 
 # Запускаем бота

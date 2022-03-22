@@ -12,4 +12,4 @@ def is_even_week_of_year():
 
 
 def get_time():
-    return ' '.join(str(x) for x in datetime.now().isocalendar())
+    return str(datetime.now().time())

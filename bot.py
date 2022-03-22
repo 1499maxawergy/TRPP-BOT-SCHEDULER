@@ -16,6 +16,7 @@ keyboard.row("🔙", "🔝", "🔜")
 
 # Inline-клавиатура бота
 inline_keyboard = telebot.types.InlineKeyboardMarkup()
+inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Текущая", callback_data='current'))
 inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Четная", callback_data='even'))
 inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd'))
 
@@ -68,7 +69,7 @@ def get_week(m):
     bw.change_activity(m.chat.id, 0)
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
-        bot.send_message(m.chat.id, pr.print_week(group_name, tw.is_even_week_of_year()),
+        bot.send_message(m.chat.id, "Выберите неделю",
                          parse_mode='Markdown', reply_markup=inline_keyboard)
     else:
         bot.send_message(m.chat.id, "Вы не установили свою группу."
@@ -94,9 +95,14 @@ def handle_text(m):
 
 
 @bot.callback_query_handler(func=lambda call: True)
-def callback_func(call):
+def callback_handler(call):
     data = call.data
-    if data == 'even':
+    if data == 'current':
+        bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id),
+                                                 tw.is_even_week_of_year())
+                              , chat_id=call.message.chat.id, message_id=call.message.id,
+                              parse_mode='Markdown')
+    elif data == 'even':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id), 1)
                               , chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')

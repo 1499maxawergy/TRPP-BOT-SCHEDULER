@@ -95,6 +95,3 @@ def print_day(group_name, week, day):
         return answer
     else:
         return "Ваша группа не найдена."
-
-__init__()
-print (print_day("ИКБО-16-20", 1, 6))

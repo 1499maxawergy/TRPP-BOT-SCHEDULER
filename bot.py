@@ -89,7 +89,7 @@ def get_day(m):
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите день текущей недели",
-                         parse_mode='Markdown', reply_markup=inline_keyboard_week)
+                         parse_mode='Markdown', reply_markup=inline_keyboard_day)
     else:
         bot.send_message(m.chat.id, "Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')

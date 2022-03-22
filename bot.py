@@ -1,5 +1,6 @@
 import telebot
 
+import base_worker as bw
 import group_parser as pr
 
 pr.__init__()
@@ -14,8 +15,29 @@ keyboard.row("🔙", "🔝", "🔜")
 
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
-def start(m, res=False):
-    bot.send_message(m.chat.id, 'Я на связи. Напиши мне что-нибудь )', reply_markup=keyboard)
+def start(m):
+    bot.send_message(m.chat.id,
+                     'Добро пожаловать, я бот, показывающий расписание ИИТ\n/help - помощь',
+                     reply_markup=keyboard)
+
+
+# Функция, обрабатывающая команду /help
+@bot.message_handler(commands=["help"])
+def start(m):
+    bot.send_message(m.chat.id,
+                     '/set - установить свою группу'
+                     '\n/week - узнать расписание на эту неделю',
+                     reply_markup=keyboard)
+
+
+# Функция, обрабатывающая команду /set
+@bot.message_handler(commands=["set"])
+def start(m):
+    if pr.is_group_exists(m.text):
+        bw.change_group(m.chat.id, m.text)
+        bot.reply_to(m, "Группа установлена успешно!")
+    else:
+        bot.reply_to(m, "Такой группы не существует.")
 
 
 # Получение сообщений от юзера

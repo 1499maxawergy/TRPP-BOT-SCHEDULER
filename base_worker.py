@@ -64,3 +64,15 @@ def get_activity(chat_id):
     if row is not None:
         return row[3]
     return None
+
+
+def get_base():
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    cursor.close()
+    out_line = ""
+    if rows is not None:
+        for row in rows:
+            row += out_line + '\n'
+    return out_line

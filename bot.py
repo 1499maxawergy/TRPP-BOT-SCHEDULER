@@ -42,6 +42,13 @@ def set_group_to_user(m):
     bot.reply_to(m, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.")
 
 
+# Функция, обрабатывающая команду /set
+@bot.message_handler(commands=["base"])
+def set_group_to_user(m):
+    bw.change_activity(m.chat.id, 0)
+    bot.reply_to(m, bw.get_base())
+
+
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
 def handle_text(m):

@@ -138,10 +138,11 @@ def callback_handler(call):
         bot.edit_message_text(text=text, chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
     elif data.startswith("day"):
-        day = data.split("-")[1]
-        bot.edit_message_text(text=pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), day),
-                              chat_id=call.message.chat.id, message_id=call.message.id,
-                              parse_mode='Markdown')
+        print(data.split("-")[1])
+        # day = data.split("-")[1]
+        # bot.edit_message_text(text=pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), day),
+        #                       chat_id=call.message.chat.id, message_id=call.message.id,
+        #                       parse_mode='Markdown')
 
 
 # Запускаем бота

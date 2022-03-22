@@ -15,7 +15,7 @@ keyboard = telebot.types.ReplyKeyboardMarkup(True)
 keyboard.row("🔙", "🔝", "🔜")
 
 # Inline-клавиатура бота
-inline_keyboard = telebot.types.InlineKeyboardMarkup(True)
+inline_keyboard = telebot.types.InlineKeyboardMarkup()
 inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Четная", callback_data='even'))
 inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd'))
 

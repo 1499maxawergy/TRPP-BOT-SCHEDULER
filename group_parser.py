@@ -37,6 +37,11 @@ def print_week(group_name, week):
     group_name = group_name.upper()
     if group_cell.get(group_name) is not None:
         answer = "```\n"
+        if week == 0:
+            answer += 'Нечетная '
+        else:
+            answer += 'Четная '
+        answer += 'неделя' + '\n'
         excel_filename = get_xlsx(group_name)
         sheet = openpyxl.load_workbook(excel_filename).active
 

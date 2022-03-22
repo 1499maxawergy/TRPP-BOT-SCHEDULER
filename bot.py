@@ -14,6 +14,12 @@ bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
 keyboard = telebot.types.ReplyKeyboardMarkup(True)
 keyboard.row("🔙", "🔝", "🔜")
 
+# Inline-клавиатура бота
+inline_keyboard = telebot.types.InlineKeyboardMarkup(True)
+key_to = telebot.types.InlineKeyboardButton(text="Четная", callback_data='even')
+key_undo = telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd')
+inline_keyboard.add(key_to, key_undo)
+
 
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
@@ -63,7 +69,8 @@ def get_week(m):
     bw.change_activity(m.chat.id, 0)
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
-        bot.send_message(m.chat.id, pr.print_week(group_name, 0), parse_mode='Markdown')
+        bot.send_message(m.chat.id, pr.print_week(group_name, tw.is_even_week_of_year()),
+                         parse_mode='Markdown', reply_markup=inline_keyboard)
     else:
         bot.send_message(m.chat.id, "Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
@@ -85,6 +92,17 @@ def handle_text(m):
 
     # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
     # bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_func(call):
+    data = call.data
+    if data == 'even':
+        bot.edit_message_text(text=pr.print_week(bw.get_group(call.chat.id), 0)
+                              , chat_id=call.chat.id, message_id=call.message.id)
+    elif data == 'odd':
+        bot.edit_message_text(text=pr.print_week(bw.get_group(call.chat.id), 1)
+                              , chat_id=call.chat.id, message_id=call.message.id)
 
 
 # Запускаем бота

@@ -44,7 +44,9 @@ def start(m):
 def start_chatting(m):
     bot.send_message(m.chat.id,
                      '/set - установить свою группу'
-                     '\n/week - узнать расписание на эту неделю',
+                     '\n/profile - узнать выбранную группу'
+                     '\n/week - узнать расписание на неделю'
+                     '\n/day - узнать расписание на день текущей недели',
                      reply_markup=None)
 
 

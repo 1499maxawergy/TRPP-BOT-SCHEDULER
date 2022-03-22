@@ -4,6 +4,7 @@ import requests
 url = 'https://www.mirea.ru/schedule/'
 links = []
 
+
 def parse_mirea():
     page = requests.get(url)
     soup = BeautifulSoup(page.text, "html.parser")
@@ -13,6 +14,7 @@ def parse_mirea():
         if link['href'].endswith(".xlsx"):
             print(link['href'])
 
+
 parse_mirea()
 
-#ИИТ ИИИ ИРЭА ИТХТ
+# ИИТ ИИИ ИРЭА ИТХТ

@@ -16,14 +16,18 @@ keyboard.row("🔙", "🔝", "🔜")
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
 def start(m):
+    bw.change_activity(m.chat.id, 0)
     bot.send_message(m.chat.id,
-                     'Добро пожаловать, я бот, показывающий расписание ИИТ\n/help - помощь',
+                     'Поздравляю с регистрацией, пользователь'
+                     + str(m.chat.id)
+                     + 'Я бот, показывающий расписание ИИТ В РТУ МИРЭА'
+                       '\n/help - команды для работы со мной',
                      reply_markup=keyboard)
 
 
 # Функция, обрабатывающая команду /help
 @bot.message_handler(commands=["help"])
-def start(m):
+def start_chatting(m):
     bot.send_message(m.chat.id,
                      '/set - установить свою группу'
                      '\n/week - узнать расписание на эту неделю',
@@ -32,19 +36,26 @@ def start(m):
 
 # Функция, обрабатывающая команду /set
 @bot.message_handler(commands=["set"])
-def start(m):
-    if pr.is_group_exists(m.text):
-        bw.change_group(m.chat.id, m.text)
-        bot.reply_to(m, "Группа установлена успешно!")
-    else:
-        bot.reply_to(m, "Такой группы не существует.")
+def set_group_to_user(m):
+    bw.change_activity(m.chat.id, 1)
+    bot.reply_to(m, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.")
 
 
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
-def handle_text(message):
+def handle_text(m):
+    activity = bw.get_activity(m.chat.id)
+    if activity == 0:
+        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
+    elif activity == 1:
+        if pr.is_group_exists(m.text):
+            bw.change_group(m.chat.id, m.text)
+            bot.reply_to(m, "Группа установлена успешно!")
+        else:
+            bot.reply_to(m, "Такой группы не существует.")
+
     # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
-    bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')
+    # bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')
 
 
 # Запускаем бота

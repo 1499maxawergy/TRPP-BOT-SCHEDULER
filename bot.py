@@ -16,9 +16,8 @@ keyboard.row("🔙", "🔝", "🔜")
 
 # Inline-клавиатура бота
 inline_keyboard = telebot.types.InlineKeyboardMarkup(True)
-key_to = telebot.types.InlineKeyboardButton(text="Четная", callback_data='even')
-key_undo = telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd')
-inline_keyboard.add(key_to, key_undo)
+inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Четная", callback_data='even'))
+inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd'))
 
 
 # Функция, обрабатывающая команду /start

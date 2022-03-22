@@ -2,6 +2,7 @@ import telebot
 
 import base_worker as bw
 import group_parser as pr
+import time_worker as tw
 
 pr.__init__()
 bw.__init__()
@@ -49,12 +50,23 @@ def check_base(m):
     bot.reply_to(m, bw.get_base())
 
 
+# Функция, обрабатывающая команду /time
+@bot.message_handler(commands=["time"])
+def check_base(m):
+    bw.change_activity(m.chat.id, 0)
+    bot.reply_to(m, tw.get_time())
+
+
 # Функция, обрабатывающая команду /base
 @bot.message_handler(commands=["week"])
 def get_week(m):
     bw.change_activity(m.chat.id, 0)
     group_name = bw.get_group(m.chat.id)
-    bot.send_message(m.chat.id, pr.print_week(group_name, 0), parse_mode='Markdown')
+    if group_name is not None:
+        bot.send_message(m.chat.id, pr.print_week(group_name, 0), parse_mode='Markdown')
+    else:
+        bot.send_message(m.chat.id, "Вы не установили свою группу."
+                                    "\nСделать это можно командой /set", parse_mode='Markdown')
 
 
 # Получение сообщений от юзера

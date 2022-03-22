@@ -9,3 +9,7 @@ def get_weekday():
 # is_even_week_of_year вернет 0 - если неделя четная и 1 - если неделя нечетная
 def is_even_week_of_year():
     return datetime.now().isocalendar()[1] % 2
+
+
+def get_time():
+    return ' '.join(str(x) for x in datetime.now().isocalendar())

@@ -98,10 +98,10 @@ def callback_func(call):
     data = call.data
     if data == 'even':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.chat.id), 0)
-                              , chat_id=call.chat.id, message_id=call.message.id)
+                              , chat_id=call.message.chat.id, message_id=call.message.id)
     elif data == 'odd':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.chat.id), 1)
-                              , chat_id=call.chat.id, message_id=call.message.id)
+                              , chat_id=call.message.chat.id, message_id=call.message.id)
 
 
 # Запускаем бота

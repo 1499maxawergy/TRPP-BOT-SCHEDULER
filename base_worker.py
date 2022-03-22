@@ -1,28 +1,20 @@
+import os
+
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 import group_parser
 
-# import urllib.parse as urlparse
-# import os
-# url = urlparse.urlparse(os.environ['DATABASE_URL'])
-# dbname = url.path[1:]
-# user = url.username
-# password = url.password
-# host = url.hostname
-# port = url.port
+# con = psycopg2.connect(
+#     dbname='postgres',
+#     user='root',
+#     password='123',
+#     host='localhost',
+#     port='5432',
+# )
 
-
-# group_parser.__init__()
-
-con = psycopg2.connect(
-    dbname='postgres',
-    user='root',
-    password='123',
-    host='localhost',
-    port='5432',
-)
-
+DATABASE_URL = os.environ.get('DATABASE_URL')
+con = psycopg2.connect(DATABASE_URL)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 

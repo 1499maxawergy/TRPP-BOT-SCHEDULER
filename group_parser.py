@@ -27,7 +27,7 @@ def get_xlsx(group_name):
 
 
 def is_group_exists(group_name):
-    if group_cell.get(group_name) is not None:
+    if group_cell.get(group_name.upper()) is not None:
         return True
     return False
 

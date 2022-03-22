@@ -31,8 +31,8 @@ def __init__():
     cursor.execute("CREATE TABLE IF NOT EXISTS users ("
                    "id serial NOT NULL PRIMARY KEY,"
                    "chat_id bigint UNIQUE NOT NULL,"
-                   "group_name VARCHAR(16) NOT NULL,"
-                   "activity integer NOT NULL"
+                   "group_name VARCHAR(16),"
+                   "activity integer"
                    ");")
     cursor.close()
 

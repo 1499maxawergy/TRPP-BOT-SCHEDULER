@@ -4,6 +4,7 @@ import base_worker as bw
 import group_parser as pr
 
 pr.__init__()
+bw.__init__()
 
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
@@ -18,11 +19,11 @@ keyboard.row("🔙", "🔝", "🔜")
 def start(m):
     bw.change_activity(m.chat.id, 0)
     bot.send_message(m.chat.id,
-                     'Поздравляю с регистрацией, пользователь'
+                     'Поздравляю с регистрацией, пользователь '
                      + str(m.chat.id)
-                     + 'Я бот, показывающий расписание ИИТ В РТУ МИРЭА'
+                     + '.\nЯ бот, показывающий расписание ИИТ В РТУ МИРЭА'
                        '\n/help - команды для работы со мной',
-                     reply_markup=keyboard)
+                     reply_markup=None)
 
 
 # Функция, обрабатывающая команду /help
@@ -31,7 +32,7 @@ def start_chatting(m):
     bot.send_message(m.chat.id,
                      '/set - установить свою группу'
                      '\n/week - узнать расписание на эту неделю',
-                     reply_markup=keyboard)
+                     reply_markup=None)
 
 
 # Функция, обрабатывающая команду /set
@@ -53,6 +54,7 @@ def handle_text(m):
             bot.reply_to(m, "Группа установлена успешно!")
         else:
             bot.reply_to(m, "Такой группы не существует.")
+        bw.change_activity(m.chat.id, 0)
 
     # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
     # bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')

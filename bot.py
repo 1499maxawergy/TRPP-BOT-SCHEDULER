@@ -65,7 +65,7 @@ def handle_text(m):
         bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
     elif activity == 1:
         if pr.is_group_exists(m.text):
-            bw.change_group(m.chat.id, m.text)
+            bw.change_group(m.chat.id, m.text.upper())
             bot.reply_to(m, "Группа установлена успешно!")
         else:
             bot.reply_to(m, "Такой группы не существует.")

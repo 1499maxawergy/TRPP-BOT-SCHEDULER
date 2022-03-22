@@ -32,8 +32,8 @@ inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="ЧТ", callback
 def start(m):
     bw.change_activity(m.chat.id, 0)
     bot.send_message(m.chat.id,
-                     'Поздравляю с регистрацией, пользователь '
-                     + str(m.chat.id)
+                     'Поздравляю с регистрацией, пользователь @'
+                     + str(m.from_user.username)
                      + '.\nЯ бот, показывающий расписание ИИТ В РТУ МИРЭА'
                        '\n/help - команды для работы со мной',
                      reply_markup=None)
@@ -45,6 +45,14 @@ def start_chatting(m):
     bot.send_message(m.chat.id,
                      '/set - установить свою группу'
                      '\n/week - узнать расписание на эту неделю',
+                     reply_markup=None)
+
+
+# Функция, обрабатывающая команду /profile
+@bot.message_handler(commands=["profile"])
+def start_chatting(m):
+    bot.send_message(m.chat.id,
+                     'Привет, @' + str(m.from_user.username) + '\nВыбранная группа - ' + bw.get_group(m.chat.id),
                      reply_markup=None)
 
 

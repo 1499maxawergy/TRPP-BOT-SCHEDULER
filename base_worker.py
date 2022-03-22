@@ -74,5 +74,5 @@ def get_base():
     out_line = ""
     if rows is not None:
         for row in rows:
-            row += out_line + '\n'
+            out_line += ','.join(row) + '\n'
     return out_line

@@ -49,11 +49,12 @@ def print_week(group_name, week):
             answer += "🔥" + sheet[day][0].value + '\n'
             for para in range(day + week, day + 12, 2):
                 if sheet[para][group_cell[group_name]].value is not None:
-                    answer += '№' + str(sheet[para][1].value) + '\t'
                     if sheet[para][1].value is not None:
+                        answer += '№' + str(sheet[para][1].value) + '\t'
                         answer += str(sheet[para][2].value) + '\t'
                         answer += str(sheet[para][3].value) + '\t'
                     else:
+                        answer += '№' + str(sheet[para - 1][1].value) + '\t'
                         answer += str(sheet[para - 1][2].value) + '\t'
                         answer += str(sheet[para - 1][3].value) + '\t'
 

@@ -10,15 +10,21 @@ bw.__init__()
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
 
-# Клавиатура бота
-keyboard = telebot.types.ReplyKeyboardMarkup(True)
-keyboard.row("🔙", "🔝", "🔜")
+# Inline-week-клавиатура бота
+inline_keyboard_week = telebot.types.InlineKeyboardMarkup()
+inline_keyboard_week.add(telebot.types.InlineKeyboardButton(text="Текущая", callback_data='current'))
+inline_keyboard_week.add(telebot.types.InlineKeyboardButton(text="Четная", callback_data='even'))
+inline_keyboard_week.add(telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd'))
 
-# Inline-клавиатура бота
-inline_keyboard = telebot.types.InlineKeyboardMarkup()
-inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Текущая", callback_data='current'))
-inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Четная", callback_data='even'))
-inline_keyboard.add(telebot.types.InlineKeyboardButton(text="Нечетная", callback_data='odd'))
+# Inline-day-клавиатура бота
+inline_keyboard_day = telebot.types.InlineKeyboardMarkup()
+inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="Сегодня", callback_data='current_day'))
+inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="ПН", callback_data='day-1'),
+                        telebot.types.InlineKeyboardButton(text="ВТ", callback_data='day-2'),
+                        telebot.types.InlineKeyboardButton(text="СР", callback_data='day-3'))
+inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="ЧТ", callback_data='day-4'),
+                        telebot.types.InlineKeyboardButton(text="ПТ", callback_data='day-5'),
+                        telebot.types.InlineKeyboardButton(text="СБ", callback_data='day-6'))
 
 
 # Функция, обрабатывающая команду /start
@@ -63,14 +69,27 @@ def check_base(m):
     bot.reply_to(m, tw.get_time())
 
 
-# Функция, обрабатывающая команду /base
+# Функция, обрабатывающая команду /week
 @bot.message_handler(commands=["week"])
 def get_week(m):
     bw.change_activity(m.chat.id, 0)
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите неделю",
-                         parse_mode='Markdown', reply_markup=inline_keyboard)
+                         parse_mode='Markdown', reply_markup=inline_keyboard_week)
+    else:
+        bot.send_message(m.chat.id, "Вы не установили свою группу."
+                                    "\nСделать это можно командой /set", parse_mode='Markdown')
+
+
+# Функция, обрабатывающая команду /day
+@bot.message_handler(commands=["day"])
+def get_day(m):
+    bw.change_activity(m.chat.id, 0)
+    group_name = bw.get_group(m.chat.id)
+    if group_name is not None:
+        bot.send_message(m.chat.id, "Выберите день текущей недели",
+                         parse_mode='Markdown', reply_markup=inline_keyboard_week)
     else:
         bot.send_message(m.chat.id, "Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
@@ -109,6 +128,19 @@ def callback_handler(call):
     elif data == 'odd':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id), 0)
                               , chat_id=call.message.chat.id, message_id=call.message.id,
+                              parse_mode='Markdown')
+    elif data == 'current_day':
+        text = ""
+        if tw.get_weekday() == 7:
+            text = "Сегодня воскресенье! Выходной!"
+        else:
+            text = pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), tw.get_weekday())
+        bot.edit_message_text(text=text, chat_id=call.message.chat.id, message_id=call.message.id,
+                              parse_mode='Markdown')
+    elif data.startswith("day"):
+        day = data.split("-")[1]
+        bot.edit_message_text(text=pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), day),
+                              chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
 
 

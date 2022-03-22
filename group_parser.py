@@ -66,3 +66,35 @@ def print_week(group_name, week):
         return answer
     else:
         return "Ваша группа не найдена."
+
+
+def print_day(group_name, week, day):
+    group_name = group_name.upper()
+    if group_cell.get(group_name) is not None:
+        answer = "```\n"
+        excel_filename = get_xlsx(group_name)
+        sheet = openpyxl.load_workbook(excel_filename).active
+
+        answer += "🔥" + sheet[4 + 12 * (day - 1)][0].value + '\n'
+        for para in range(4 + 12 * (day - 1) + week, 16 + 12 * (day - 1), 2):
+            if sheet[para][group_cell[group_name]].value is not None:
+                if sheet[para][1].value is not None:
+                    answer += '№' + str(sheet[para][1].value) + '\t'
+                    answer += str(sheet[para][2].value) + '\t'
+                    answer += str(sheet[para][3].value) + '\t'
+                else:
+                    answer += '№' + str(sheet[para - 1][1].value) + '\t'
+                    answer += str(sheet[para - 1][2].value) + '\t'
+                    answer += str(sheet[para - 1][3].value) + '\t'
+
+                answer += str(sheet[para][group_cell[group_name] + 3].value).replace('\n', '/ ') + '\n'
+                answer += str(sheet[para][group_cell[group_name]].value) + '\n\n'
+
+
+        answer += "```"
+        return answer
+    else:
+        return "Ваша группа не найдена."
+
+__init__()
+print (print_day("ИКБО-16-20", 1, 6))

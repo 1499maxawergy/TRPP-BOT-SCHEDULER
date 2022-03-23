@@ -1,29 +1,22 @@
+import os
+
 import openpyxl
+
+import soup_worker
 
 group_cell = dict()
 
 
 # init - просматривает все xlsx файлы и создает словарь с нахождением расписания этих групп
 def __init__():
-    for number_of_xlxs in range(1, 4):
-        sheet = openpyxl.load_workbook("iit" + str(number_of_xlxs) + ".xlsx").active
-        for column in range(5, sheet.max_column, 5):
-            if sheet[2][column].value != "День недели":
-                group_cell[sheet[2][column].value] = column
-
-
-# get_xlsx - по имени группы выводит название файла, в котором лежит расписание с этой группой
-def get_xlsx(group_name):
-    if group_name[-2:] == "21":
-        return "iit1.xlsx"
-    elif group_name[-2:] == "20":
-        return "iit2.xlsx"
-    elif group_name[-2:] == "19":
-        return "iit3.xlsx"
-    elif group_name[-2:] == "18":
-        return "iit4.xlsx"
-    else:
-        return None
+    soup_worker.parse_mirea()
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    for file in files:
+        if file.endswith(".xlsx"):
+            sheet = openpyxl.load_workbook(file).active
+            for column in range(5, sheet.max_column, 5):
+                if sheet[2][column].value != "День недели":
+                    group_cell[sheet[2][column].value] = [file, column]
 
 
 def is_group_exists(group_name):
@@ -35,20 +28,20 @@ def is_group_exists(group_name):
 # print_week - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
     group_name = group_name.upper()
-    if group_cell.get(group_name) is not None:
+    if group_cell.get(group_name)[1] is not None:
         answer = "```\n"
         if week == 0:
-            answer += 'Нечетная '
+            answer += 'Нечетная неделя\n\n'
         else:
-            answer += 'Четная '
-        answer += 'неделя' + '\n'
-        excel_filename = get_xlsx(group_name)
+            answer += 'Четная неделя\n\n'
+
+        excel_filename = group_cell.get(group_name)[0]
         sheet = openpyxl.load_workbook(excel_filename).active
 
         for day in range(4, 76, 12):
             answer += "🔥" + sheet[day][0].value + '\n'
             for para in range(day + week, day + 12, 2):
-                if sheet[para][group_cell[group_name]].value is not None:
+                if sheet[para][group_cell[group_name][1]].value is not None:
                     if sheet[para][1].value is not None:
                         answer += '№' + str(sheet[para][1].value) + '\t'
                         answer += str(sheet[para][2].value) + '\t'
@@ -58,8 +51,8 @@ def print_week(group_name, week):
                         answer += str(sheet[para - 1][2].value) + '\t'
                         answer += str(sheet[para - 1][3].value) + '\t'
 
-                    answer += str(sheet[para][group_cell[group_name] + 3].value).replace('\n', '/ ') + '\n'
-                    answer += str(sheet[para][group_cell[group_name]].value) + '\n\n'
+                    answer += str(sheet[para][group_cell[group_name][1] + 3].value).replace('\n', '/ ') + '\n'
+                    answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
             answer += '\n\n'
 
         answer += "```"
@@ -70,14 +63,14 @@ def print_week(group_name, week):
 
 def print_day(group_name, week, day):
     group_name = group_name.upper()
-    if group_cell.get(group_name) is not None:
+    if group_cell.get(group_name)[1] is not None:
         answer = "```\n"
-        excel_filename = get_xlsx(group_name)
+        excel_filename = group_cell.get(group_name)[0]
         sheet = openpyxl.load_workbook(excel_filename).active
 
         answer += "🔥" + sheet[4 + 12 * (day - 1)][0].value + '\n'
         for para in range(4 + 12 * (day - 1) + week, 16 + 12 * (day - 1), 2):
-            if sheet[para][group_cell[group_name]].value is not None:
+            if sheet[para][group_cell[group_name][1]].value is not None:
                 if sheet[para][1].value is not None:
                     answer += '№' + str(sheet[para][1].value) + '\t'
                     answer += str(sheet[para][2].value) + '\t'
@@ -87,9 +80,8 @@ def print_day(group_name, week, day):
                     answer += str(sheet[para - 1][2].value) + '\t'
                     answer += str(sheet[para - 1][3].value) + '\t'
 
-                answer += str(sheet[para][group_cell[group_name] + 3].value).replace('\n', '/ ') + '\n'
-                answer += str(sheet[para][group_cell[group_name]].value) + '\n\n'
-
+                answer += str(sheet[para][group_cell[group_name][1] + 3].value).replace('\n', '/ ') + '\n'
+                answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
 
         answer += "```"
         return answer

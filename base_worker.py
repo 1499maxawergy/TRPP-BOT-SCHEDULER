@@ -71,11 +71,11 @@ def get_base():
     cursor.execute("SELECT * FROM users")
     rows = cursor.fetchall()
     cursor.close()
-    out_line = "```"
+    out_line = ""
     if rows is not None:
         for row in rows:
-            out_line += '\t'.join(str(x) for x in row) + '\n'
-    return out_line + "```"
+            out_line += ' '.join(str(x) for x in row) + '\n'
+    return out_line
 
 def get_users():
     cursor = con.cursor()

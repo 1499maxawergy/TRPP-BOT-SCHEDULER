@@ -70,7 +70,7 @@ def set_group_to_user(m):
 def check_base(m):
     if m.chat.id == 680461201 or m.chat.id == 447163898:
         bw.change_activity(m.chat.id, 0)
-        bot.send_message(m.chat.id, bw.get_base(), parse_mode='Markdown', reply_markup=None)
+        bot.send_message(m.chat.id, bw.get_base(), reply_markup=None)
     else:
         bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
 
@@ -82,7 +82,7 @@ def send_msg(m):
         users = bw.get_users()
         for user in users:
             # bot.send_message(user, bw.get_base(), parse_mode='Markdown', reply_markup=None)
-            print(user)
+            print(str(user)[:-2])
     else:
         bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
 

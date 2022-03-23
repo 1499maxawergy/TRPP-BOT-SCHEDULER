@@ -78,11 +78,7 @@ def check_base(m):
 @bot.message_handler(commands=["msg"])
 def send_msg(m):
     if m.chat.id == 680461201 or m.chat.id == 447163898:
-        bw.change_activity(m.chat.id, 0)
-        users = bw.get_users()
-        for user in users:
-            # bot.send_message(user, bw.get_base(), parse_mode='Markdown', reply_markup=None)
-            print(int(str(user)[1:-2]))
+        bw.change_activity(m.chat.id, 2)
     else:
         bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
 
@@ -132,6 +128,11 @@ def handle_text(m):
             bot.reply_to(m, "Группа установлена успешно!")
         else:
             bot.reply_to(m, "Такой группы не существует.")
+        bw.change_activity(m.chat.id, 0)
+    elif activity == 2:
+        users = bw.get_users()
+        for user in users:
+            bot.send_message(int(str(user)[1:-2]), m.text, reply_markup=None)
         bw.change_activity(m.chat.id, 0)
 
     # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)

@@ -62,21 +62,36 @@ def start_chatting(m):
 @bot.message_handler(commands=["set"])
 def set_group_to_user(m):
     bw.change_activity(m.chat.id, 1)
-    bot.reply_to(m, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.")
+    bot.send_message(m.chat.id, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.", reply_markup=None)
 
 
 # Функция, обрабатывающая команду /base
 @bot.message_handler(commands=["base"])
 def check_base(m):
-    bw.change_activity(m.chat.id, 0)
-    bot.reply_to(m, bw.get_base())
+    if m.chat.id == 680461201 or m.chat.id == 447163898:
+        bw.change_activity(m.chat.id, 0)
+        bot.send_message(m, bw.get_base(), parse_mode='Markdown', reply_markup=None)
+    else:
+        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
+
+
+@bot.message_handler(commands=["msg"])
+def send_msg(m):
+    if m.chat.id == 680461201 or m.chat.id == 447163898:
+        bw.change_activity(m.chat.id, 0)
+        users = bw.get_users()
+        for user in users:
+            # bot.send_message(user, bw.get_base(), parse_mode='Markdown', reply_markup=None)
+            print(user)
+    else:
+        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
 
 
 # Функция, обрабатывающая команду /time
 @bot.message_handler(commands=["time"])
 def check_base(m):
     bw.change_activity(m.chat.id, 0)
-    bot.reply_to(m, tw.get_time())
+    bot.reply_to(m, tw.get_time(), reply_markup=None)
 
 
 # Функция, обрабатывающая команду /week
@@ -89,7 +104,7 @@ def get_week(m):
                          parse_mode='Markdown', reply_markup=inline_keyboard_week)
     else:
         bot.send_message(m.chat.id, "Вы не установили свою группу."
-                                    "\nСделать это можно командой /set", parse_mode='Markdown')
+                                    "\nСделать это можно командой /set", parse_mode='Markdown', reply_markup=None)
 
 
 # Функция, обрабатывающая команду /day

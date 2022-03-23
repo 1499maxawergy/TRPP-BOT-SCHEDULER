@@ -82,7 +82,7 @@ def send_msg(m):
         users = bw.get_users()
         for user in users:
             # bot.send_message(user, bw.get_base(), parse_mode='Markdown', reply_markup=None)
-            print(str(user)[:-2])
+            print(int(str(user)[1:-2]))
     else:
         bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
 

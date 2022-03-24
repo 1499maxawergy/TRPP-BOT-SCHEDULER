@@ -2,6 +2,7 @@ import telebot
 
 import base_worker as bw
 import group_parser as pr
+import soup_worker
 import time_worker as tw
 
 pr.__init__()
@@ -117,6 +118,13 @@ def get_day(m):
         bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
 
+# Floppa
+@bot.message_handler(commands=["floppa"])
+def get_floppa(m):
+    bot.send_message(m.chat.id, "Вы нашли секретную функцию! Испытайте свою удачу...🛀")
+    soup_worker.download_floppa()
+    bot.send_photo(m.chat.id, "floppa.png", reply_markup=None)
+    soup_worker.delete_floppa()
 
 # Получение сообщений от пользователя
 @bot.message_handler(content_types=["text"])

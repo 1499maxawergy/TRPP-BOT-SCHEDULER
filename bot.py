@@ -129,9 +129,11 @@ def get_floppa(m):
     rand = random.randint(0, 10)
     if rand == 0:
         bot.send_photo(m.chat.id, "https://i.kym-cdn.com/photos/images/original/002/028/716/ef3.jpg", reply_markup=None)
+        bot.send_message(m.chat.id, "Вам выпал обычный Шлёппа. Попробуйте еще раз!", reply_markup=None)
     else:
         bot.send_photo(m.chat.id, "https://memepedia.ru/wp-content/uploads/2020/10/big-floppa-meme.png",
                        reply_markup=None)
+        bot.send_message(m.chat.id, "Поздравляем, вам выпал Шлёппа в ванне!", reply_markup=None)
 
 
 # Получение сообщений от пользователя

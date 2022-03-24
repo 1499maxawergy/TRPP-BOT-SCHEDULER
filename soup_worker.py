@@ -5,6 +5,7 @@ import requests
 
 url = 'https://www.mirea.ru/schedule/'
 
+
 # parse_mirea() - удаление предыдущих и скачивание новый .xlsx файлов с расписанием
 def parse_mirea():
     files = [f for f in os.listdir('.') if os.path.isfile(f)]

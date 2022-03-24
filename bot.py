@@ -101,7 +101,7 @@ def get_week(m):
         bot.send_message(m.chat.id, "Выберите неделю",
                          parse_mode='Markdown', reply_markup=inline_keyboard_week)
     else:
-        bot.send_message(m.chat.id, "❗ Вы не установили свою группу."
+        bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown', reply_markup=None)
 
 
@@ -114,7 +114,7 @@ def get_day(m):
         bot.send_message(m.chat.id, "Выберите день текущей недели",
                          parse_mode='Markdown', reply_markup=inline_keyboard_day)
     else:
-        bot.send_message(m.chat.id, "Вы не установили свою группу."
+        bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
 
 
@@ -127,9 +127,9 @@ def handle_text(m):
     elif activity == 1:
         if pr.is_group_exists(m.text):
             bw.change_group(m.chat.id, m.text.upper())
-            bot.reply_to(m, "✅ Группа установлена успешно!")
+            bot.reply_to(m, "✅Группа установлена успешно!")
         else:
-            bot.reply_to(m, "❗ Такой группы не существует.")
+            bot.reply_to(m, "❗Такой группы не существует.")
         bw.change_activity(m.chat.id, 0)
     elif activity == 2:
         users = bw.get_users()

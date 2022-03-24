@@ -73,6 +73,7 @@ def set_group_to_user(m):
 def check_base(m):
     if m.chat.id == 680461201 or m.chat.id == 447163898:
         bw.change_activity(m.chat.id, 0)
+        bw.extra()
         bot.send_message(m.chat.id, bw.get_base(), reply_markup=None)
     else:
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)

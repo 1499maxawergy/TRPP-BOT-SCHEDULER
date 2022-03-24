@@ -66,6 +66,12 @@ def get_activity(chat_id):
     return None
 
 
+def extra():
+    cursor = con.cursor()
+    cursor.execute("ALTER TABLE users ADD COLUMN username VARCHAR(255);")
+    cursor.close()
+
+
 # get_base() - получение полной базы данных
 def get_base():
     cursor = con.cursor()

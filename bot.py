@@ -34,7 +34,7 @@ inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="ЧТ", callback
 @bot.message_handler(commands=["start"])
 def start(m):
     bw.change_activity(m.chat.id, 0)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
                      'Поздравляю с регистрацией, пользователь @'
                      + str(m.from_user.username)
@@ -46,7 +46,7 @@ def start(m):
 # Функция, обрабатывающая команду /help
 @bot.message_handler(commands=["help"])
 def start_chatting(m):
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
                      '/set - установить свою группу.'
                      '\n/profile - узнать выбранную группу.'
@@ -58,7 +58,7 @@ def start_chatting(m):
 # Функция, обрабатывающая команду /profile
 @bot.message_handler(commands=["profile"])
 def start_chatting(m):
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
                      'Привет, @' + str(m.from_user.username) + '!🖐\nВыбранная группа: ' + bw.get_group(m.chat.id),
                      reply_markup=None)
@@ -68,7 +68,7 @@ def start_chatting(m):
 @bot.message_handler(commands=["set"])
 def set_group_to_user(m):
     bw.change_activity(m.chat.id, 1)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.", reply_markup=None)
 
 
@@ -79,7 +79,7 @@ def check_base(m):
         bw.change_activity(m.chat.id, 0)
         bot.send_message(m.chat.id, bw.get_base(), reply_markup=None)
     else:
-        bw.set_username(m, m.from_user.username)
+        bw.set_username(m.chat.id, m.from_user.username)
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
 
 
@@ -90,7 +90,7 @@ def send_msg(m):
         bw.change_activity(m.chat.id, 2)
         bot.send_message(m.chat.id, "Ожидаю текста для рассылки💤", reply_markup=None)
     else:
-        bw.set_username(m, m.from_user.username)
+        bw.set_username(m.chat.id, m.from_user.username)
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
 
 
@@ -98,7 +98,7 @@ def send_msg(m):
 @bot.message_handler(commands=["time"])
 def check_base(m):
     bw.change_activity(m.chat.id, 0)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.reply_to(m, tw.get_time(), reply_markup=None)
 
 
@@ -106,7 +106,7 @@ def check_base(m):
 @bot.message_handler(commands=["week"])
 def get_week(m):
     bw.change_activity(m.chat.id, 0)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите неделю",
@@ -120,7 +120,7 @@ def get_week(m):
 @bot.message_handler(commands=["day"])
 def get_day(m):
     bw.change_activity(m.chat.id, 0)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     group_name = bw.get_group(m.chat.id)
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите день текущей недели",
@@ -133,7 +133,7 @@ def get_day(m):
 # Floppa
 @bot.message_handler(commands=["floppa"])
 def get_floppa(m):
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id, "Вы нашли секретную функцию! Испытайте свою удачу...🛀")
     random.seed()
     rand = random.randint(0, 10)
@@ -150,7 +150,7 @@ def get_floppa(m):
 @bot.message_handler(content_types=["text"])
 def handle_text(m):
     activity = bw.get_activity(m.chat.id)
-    bw.set_username(m, m.from_user.username)
+    bw.set_username(m.chat.id, m.from_user.username)
     if activity == 0:
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
     elif activity == 1:

@@ -18,7 +18,8 @@ def __init__():
                    "id serial NOT NULL PRIMARY KEY,"
                    "chat_id bigint UNIQUE NOT NULL,"
                    "group_name VARCHAR(16),"
-                   "activity integer"
+                   "activity integer,"
+                   "username VARCHAR(255)"
                    ");")
     cursor.close()
 
@@ -66,9 +67,12 @@ def get_activity(chat_id):
     return None
 
 
-def extra():
+# set_activity() - добавление имени пользователя
+def set_username(chat_id, username):
     cursor = con.cursor()
-    cursor.execute("ALTER TABLE users ADD COLUMN username VARCHAR(255);")
+    cursor.execute("INSERT INTO users(chat_id, username) VALUES(%s, %s)"
+                   "ON CONFLICT(chat_id) DO UPDATE SET username = %s",
+                   (chat_id, username, username))
     cursor.close()
 
 

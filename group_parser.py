@@ -4,12 +4,14 @@ import openpyxl
 
 import soup_worker
 
+# Словаря для хранения пар {группа}:{[файл], [колонка]}
 group_cell = dict()
 
 
-# init - просматривает все xlsx файлы и создает словарь с нахождением расписания этих групп
+# init() - вызов parse_mirea() и составление словаря
 def __init__():
     soup_worker.parse_mirea()
+
     files = [f for f in os.listdir('.') if os.path.isfile(f)]
     for file in files:
         if file.endswith(".xlsx"):
@@ -19,21 +21,23 @@ def __init__():
                     group_cell[sheet[2][column].value] = [file, column]
 
 
+# is_group_exists() - проверка существования группы в словаре
 def is_group_exists(group_name):
     if group_cell.get(group_name.upper()) is not None:
         return True
     return False
 
 
-# print_week - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
+# print_week() - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
     group_name = group_name.upper()
+
     if group_cell.get(group_name)[1] is not None:
         answer = "```\n"
         if week == 0:
-            answer += 'Нечетная неделя\n\n'
+            answer += '⚡Нечетная неделя\n\n'
         else:
-            answer += 'Четная неделя\n\n'
+            answer += '⚡Четная неделя\n\n'
 
         excel_filename = group_cell.get(group_name)[0]
         sheet = openpyxl.load_workbook(excel_filename).active
@@ -61,8 +65,10 @@ def print_week(group_name, week):
         return "Ваша группа не найдена."
 
 
+# print_day() - вывод дня расписания по имени группы для текущей недели (1 - понедельник, 2 - вторник ...)
 def print_day(group_name, week, day):
     group_name = group_name.upper()
+
     if group_cell.get(group_name)[1] is not None:
         answer = "```\n"
         excel_filename = group_cell.get(group_name)[0]

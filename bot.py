@@ -34,8 +34,8 @@ def start(m):
     bot.send_message(m.chat.id,
                      'Поздравляю с регистрацией, пользователь @'
                      + str(m.from_user.username)
-                     + '.\nЯ бот, показывающий расписание ИИТ В РТУ МИРЭА'
-                       '\n/help - команды для работы со мной',
+                     + '🤙\nЯ бот, показывающий расписание ИИТ, ИИИ, ИРЭИ, ИТХТ в РТУ МИРЭА'
+                       '\n/help - команды для работы со мной.',
                      reply_markup=None)
 
 
@@ -43,10 +43,10 @@ def start(m):
 @bot.message_handler(commands=["help"])
 def start_chatting(m):
     bot.send_message(m.chat.id,
-                     '/set - установить свою группу'
-                     '\n/profile - узнать выбранную группу'
-                     '\n/week - узнать расписание на неделю'
-                     '\n/day - узнать расписание на день текущей недели',
+                     '/set - установить свою группу.'
+                     '\n/profile - узнать выбранную группу.'
+                     '\n/week - узнать расписание на неделю.'
+                     '\n/day - узнать расписание на день текущей недели.',
                      reply_markup=None)
 
 
@@ -54,7 +54,7 @@ def start_chatting(m):
 @bot.message_handler(commands=["profile"])
 def start_chatting(m):
     bot.send_message(m.chat.id,
-                     'Привет, @' + str(m.from_user.username) + '\nВыбранная группа - ' + bw.get_group(m.chat.id),
+                     'Привет, @' + str(m.from_user.username) + '\nВыбранная группа: ' + bw.get_group(m.chat.id),
                      reply_markup=None)
 
 
@@ -72,16 +72,17 @@ def check_base(m):
         bw.change_activity(m.chat.id, 0)
         bot.send_message(m.chat.id, bw.get_base(), reply_markup=None)
     else:
-        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
+        bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
 
 
+# Функция, обрабатывающая команду /msg
 @bot.message_handler(commands=["msg"])
 def send_msg(m):
     if m.chat.id == 680461201 or m.chat.id == 447163898:
         bw.change_activity(m.chat.id, 2)
-        bot.send_message(m.chat.id, "Ожидаю текста для рассылки", reply_markup=None)
+        bot.send_message(m.chat.id, "Ожидаю текста для рассылки💤", reply_markup=None)
     else:
-        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
+        bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
 
 
 # Функция, обрабатывающая команду /time
@@ -100,7 +101,7 @@ def get_week(m):
         bot.send_message(m.chat.id, "Выберите неделю",
                          parse_mode='Markdown', reply_markup=inline_keyboard_week)
     else:
-        bot.send_message(m.chat.id, "Вы не установили свою группу."
+        bot.send_message(m.chat.id, "❗ Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown', reply_markup=None)
 
 
@@ -117,18 +118,18 @@ def get_day(m):
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
 
 
-# Получение сообщений от юзера
+# Получение сообщений от пользователя
 @bot.message_handler(content_types=["text"])
 def handle_text(m):
     activity = bw.get_activity(m.chat.id)
     if activity == 0:
-        bot.send_message(m.chat.id, "Ожидаю вашей команды", reply_markup=None)
+        bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
     elif activity == 1:
         if pr.is_group_exists(m.text):
             bw.change_group(m.chat.id, m.text.upper())
-            bot.reply_to(m, "Группа установлена успешно!")
+            bot.reply_to(m, "✅ Группа установлена успешно!")
         else:
-            bot.reply_to(m, "Такой группы не существует.")
+            bot.reply_to(m, "❗ Такой группы не существует.")
         bw.change_activity(m.chat.id, 0)
     elif activity == 2:
         users = bw.get_users()
@@ -136,10 +137,8 @@ def handle_text(m):
             bot.send_message(int(str(user)[1:-2]), m.text, reply_markup=None)
         bw.change_activity(m.chat.id, 0)
 
-    # bot.send_message(message.chat.id, 'Вы написали: ' + message.text, reply_markup=keyboard)
-    # bot.send_message(message.chat.id, pr.print_week(message.text, 0), parse_mode='Markdown')
 
-
+# Обработка callback
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     data = call.data
@@ -157,9 +156,8 @@ def callback_handler(call):
                               , chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
     elif data == 'current_day':
-        text = ""
         if tw.get_weekday() == 7:
-            text = "Сегодня воскресенье! Выходной!"
+            text = "Сегодня воскресенье! Выходной!🎉"
         else:
             text = pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), tw.get_weekday())
         bot.edit_message_text(text=text, chat_id=call.message.chat.id, message_id=call.message.id,

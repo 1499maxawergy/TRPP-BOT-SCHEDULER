@@ -34,7 +34,7 @@ def start(m):
     bot.send_message(m.chat.id,
                      'Поздравляю с регистрацией, пользователь @'
                      + str(m.from_user.username)
-                     + '🤙\nЯ бот, показывающий расписание ИИТ, ИИИ, ИРЭИ, ИТХТ в РТУ МИРЭА'
+                     + '!🤙\nЯ - бот, показывающий расписание ИИТ, ИИИ, ИРЭИ, ИТХТ в РТУ МИРЭА.'
                        '\n/help - команды для работы со мной.',
                      reply_markup=None)
 
@@ -54,7 +54,7 @@ def start_chatting(m):
 @bot.message_handler(commands=["profile"])
 def start_chatting(m):
     bot.send_message(m.chat.id,
-                     'Привет, @' + str(m.from_user.username) + '\nВыбранная группа: ' + bw.get_group(m.chat.id),
+                     'Привет, @' + str(m.from_user.username) + '!🖐\nВыбранная группа: ' + bw.get_group(m.chat.id),
                      reply_markup=None)
 
 

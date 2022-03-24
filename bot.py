@@ -1,3 +1,5 @@
+import random
+
 import telebot
 
 import base_worker as bw
@@ -118,13 +120,19 @@ def get_day(m):
         bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
 
+
 # Floppa
 @bot.message_handler(commands=["floppa"])
 def get_floppa(m):
     bot.send_message(m.chat.id, "Вы нашли секретную функцию! Испытайте свою удачу...🛀")
-    soup_worker.download_floppa()
-    bot.send_photo(m.chat.id, "floppa.png", reply_markup=None)
-    soup_worker.delete_floppa()
+    random.seed()
+    rand = random.randint(0, 10)
+    if rand == 0:
+        bot.send_photo(m.chat.id, "https://i.kym-cdn.com/photos/images/original/002/028/716/ef3.jpg", reply_markup=None)
+    else:
+        bot.send_photo(m.chat.id, "https://memepedia.ru/wp-content/uploads/2020/10/big-floppa-meme.png",
+                       reply_markup=None)
+
 
 # Получение сообщений от пользователя
 @bot.message_handler(content_types=["text"])

@@ -69,6 +69,7 @@ def get_activity(chat_id):
 
 # set_activity() - добавление имени пользователя
 def set_username(chat_id, username):
+    username = "@" + str(username)
     cursor = con.cursor()
     cursor.execute("INSERT INTO users(chat_id, username) VALUES(%s, %s)"
                    "ON CONFLICT(chat_id) DO UPDATE SET username = %s",

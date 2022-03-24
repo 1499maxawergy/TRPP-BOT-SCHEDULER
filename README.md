@@ -25,5 +25,5 @@ Telegram: [t.me/mxwy_ezzic_bot](https://t.me/mxwy_ezzic_bot)
 
 ### Авторство
 РТУ МИРЭА ИКБО-16-20\
-Милько Максим Александрович | @maxawergy\
-Звягинцев Максим Евгеньевич &nbsp;&nbsp; | @ezzic
+Милько Максим Александрович | [@maxawergy](https://t.me/maxawergy) \
+Звягинцев Максим Евгеньевич &nbsp;&nbsp; | [@ezzic](https://t.me/ezzic)

@@ -1,3 +1,4 @@
+"""Работа с .xlsx(excel) файлами расписания РТУ МИРЭА через модуль openpyxl"""
 import os
 
 import openpyxl
@@ -10,6 +11,10 @@ group_cell = dict()
 
 # init() - вызов parse_mirea() и составление словаря
 def __init__():
+    """Инициализация Хэш-таблицы групп
+
+    Находит название группы в таблице-excel, запоминает
+     столбец и файл, в котором был найден столбец"""
     soup_worker.parse_mirea()
 
     files = [f for f in os.listdir('.') if os.path.isfile(f)]
@@ -23,6 +28,10 @@ def __init__():
 
 # is_group_exists() - проверка существования группы в словаре
 def is_group_exists(group_name):
+    """Проверка на существование группы
+
+    Проверка, есть ли ключ названия группы в данной
+     Хэш-таблице"""
     if group_cell.get(group_name.upper()) is not None:
         return True
     return False
@@ -30,6 +39,11 @@ def is_group_exists(group_name):
 
 # print_week() - вывод недели расписания по имени группы (week: 0 - нечетная, 1 - четная)
 def print_week(group_name, week):
+    """Вывод недели расписания по имени группы и четности недели
+
+    Имея номер колонки excel-таблицы с определенной группой,
+     происходит разбор таблицы и вычленение из нее важных ячеек с
+      названием предмета, номером пары, временем, кабинетом"""
     group_name = group_name.upper()
 
     if group_cell.get(group_name)[1] is not None:
@@ -67,6 +81,10 @@ def print_week(group_name, week):
 
 # print_day() - вывод дня расписания по имени группы для текущей недели (1 - понедельник, 2 - вторник ...)
 def print_day(group_name, week, day):
+    """Вывод расписания дня по имени группы, четности недели и номером дня
+
+    Аналогичная работа, как и у функции print_week(), но
+     в данной функции учитывается и день недели (1 - ПН, ..., 7 - ВС)"""
     group_name = group_name.upper()
 
     if group_cell.get(group_name)[1] is not None:

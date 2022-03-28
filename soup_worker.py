@@ -1,13 +1,18 @@
+"""Загрузка файлов с расписанием с mirea.ru/schedule через модуль BeautifulSoup4"""
 import os
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 url = 'https://www.mirea.ru/schedule/'
 
 
 # parse_mirea() - удаление предыдущих и скачивание новый .xlsx файлов с расписанием
 def parse_mirea():
+    """Обновление файлов расписания
+
+    Удаляет старые файлы с расписанием и загружает новые
+     для последующей работы с ними"""
     files = [f for f in os.listdir('.') if os.path.isfile(f)]
     for file in files:
         if file.endswith(".xlsx"):

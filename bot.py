@@ -1,10 +1,10 @@
+"""Работа бота telegram через модуль pyTelegramBotAPI(telebot)"""
 import random
 
 import telebot
 
 import base_worker as bw
 import group_parser as pr
-import soup_worker
 import time_worker as tw
 
 pr.__init__()
@@ -33,6 +33,9 @@ inline_keyboard_day.add(telebot.types.InlineKeyboardButton(text="ЧТ", callback
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
 def start(m):
+    """Обработка команды /start
+
+    Приветствует пользователя и вносит его в БД"""
     bw.change_activity(m.chat.id, 0)
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
@@ -46,6 +49,9 @@ def start(m):
 # Функция, обрабатывающая команду /help
 @bot.message_handler(commands=["help"])
 def start_chatting(m):
+    """Обработка команды /help
+
+    Возвращает пользователю информацию о запросах к боту"""
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
                      '/set - установить свою группу.'
@@ -58,6 +64,9 @@ def start_chatting(m):
 # Функция, обрабатывающая команду /profile
 @bot.message_handler(commands=["profile"])
 def start_chatting(m):
+    """Обработка команды /profile
+
+    Возвращает пользователю выбранную группу"""
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id,
                      'Привет, @' + str(m.from_user.username) + '!🖐\nВыбранная группа: ' + bw.get_group(m.chat.id),
@@ -67,6 +76,7 @@ def start_chatting(m):
 # Функция, обрабатывающая команду /set
 @bot.message_handler(commands=["set"])
 def set_group_to_user(m):
+    """Обработка команды /set"""
     bw.change_activity(m.chat.id, 1)
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.", reply_markup=None)
@@ -75,6 +85,10 @@ def set_group_to_user(m):
 # Функция, обрабатывающая команду /base
 @bot.message_handler(commands=["base"])
 def check_base(m):
+    """Обработка команды /base
+
+    Проверяет, является ли создателем пользователь, после
+     отправляет ему всю базу данных пользователей"""
     if m.chat.id == 680461201 or m.chat.id == 447163898:
         bw.change_activity(m.chat.id, 0)
         bot.send_message(m.chat.id, bw.get_base(), reply_markup=None)
@@ -86,6 +100,10 @@ def check_base(m):
 # Функция, обрабатывающая команду /msg
 @bot.message_handler(commands=["msg"])
 def send_msg(m):
+    """Обработка команды /msg
+
+    Проверяет, является ли создателем пользователь, после
+     ожидает текста для общей рассылки всем пользователям"""
     if m.chat.id == 680461201 or m.chat.id == 447163898:
         bw.change_activity(m.chat.id, 2)
         bot.send_message(m.chat.id, "Ожидаю текста для рассылки💤", reply_markup=None)
@@ -97,6 +115,9 @@ def send_msg(m):
 # Функция, обрабатывающая команду /time
 @bot.message_handler(commands=["time"])
 def check_base(m):
+    """Обработка команды /time
+
+    Возвращает время на сервере GMT+3"""
     bw.change_activity(m.chat.id, 0)
     bw.set_username(m.chat.id, m.from_user.username)
     bot.reply_to(m, tw.get_time(), reply_markup=None)
@@ -105,6 +126,9 @@ def check_base(m):
 # Функция, обрабатывающая команду /week
 @bot.message_handler(commands=["week"])
 def get_week(m):
+    """Обработка команды /week
+
+    Возвращает сообщение пользователю и inline-клавиатуру"""
     bw.change_activity(m.chat.id, 0)
     bw.set_username(m.chat.id, m.from_user.username)
     group_name = bw.get_group(m.chat.id)
@@ -119,6 +143,9 @@ def get_week(m):
 # Функция, обрабатывающая команду /day
 @bot.message_handler(commands=["day"])
 def get_day(m):
+    """Обработка команды /day
+
+    Возвращает сообщение пользователю и inline-клавиатуру"""
     bw.change_activity(m.chat.id, 0)
     bw.set_username(m.chat.id, m.from_user.username)
     group_name = bw.get_group(m.chat.id)
@@ -133,6 +160,9 @@ def get_day(m):
 # Floppa
 @bot.message_handler(commands=["floppa"])
 def get_floppa(m):
+    """Обработка команды /floppa
+
+    Пасхальное яйцо, возвращает пользователю картику кота Шлепы"""
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id, "Вы нашли секретную функцию! Испытайте свою удачу...🛀")
     random.seed()
@@ -149,6 +179,10 @@ def get_floppa(m):
 # Получение сообщений от пользователя
 @bot.message_handler(content_types=["text"])
 def handle_text(m):
+    """Обработка текста
+
+    Проверяет число конечного автомата для пользователя
+    и выполняет команды"""
     activity = bw.get_activity(m.chat.id)
     bw.set_username(m.chat.id, m.from_user.username)
     if activity == 0:
@@ -170,6 +204,13 @@ def handle_text(m):
 # Обработка callback
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
+    """Обработка callback-запросов
+
+    current - вернет расписание текущей недели,
+     even - вернет расписание четной недели,
+     odd - вернет расписание нечетной недели,
+     current_day - вернет расписание не текущий день
+     day-<1-6> - вернет расписание на определенный день текущей недели"""
     data = call.data
     if data == 'current':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id),

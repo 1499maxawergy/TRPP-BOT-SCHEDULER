@@ -240,4 +240,5 @@ def callback_handler(call):
 
 
 # Запускаем бота
-bot.polling(none_stop=True, interval=0)
+bot.infinity_polling()
+# bot.polling(none_stop=True, interval=0)

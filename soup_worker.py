@@ -18,7 +18,7 @@ def parse_mirea():
         if file.endswith(".xlsx"):
             os.remove(file)
 
-    page = requests.get(url)
+    page = requests.get(url, timeout=3)
     soup = BeautifulSoup(page.text, "html.parser")
     links = soup.findAll('a', class_='uk-link-toggle', href=True)
 

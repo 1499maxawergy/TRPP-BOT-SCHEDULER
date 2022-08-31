@@ -24,9 +24,9 @@ def parse_mirea():
 
     for link in links:
         if link['href'].endswith(".xlsx"):
-            if (link['href'].split("/")[-1].find("ИИТ") != -1 or
-                link['href'].split("/")[-1].find("ИИИ") != -1 or
-                link['href'].split("/")[-1].find("ИРЭИ") != -1 or
-                link['href'].split("/")[-1].find("ИТХТ") != -1) and \
+            if (link['href'].split("/")[-1].find("IIT") != -1 or
+                link['href'].split("/")[-1].find("III") != -1 or
+                link['href'].split("/")[-1].find("IRI") != -1 or
+                link['href'].split("/")[-1].find("ITKHT") != -1) and \
                     link['href'].split("/")[-1].find("маг") == -1:
                 open(link['href'].split("/")[-1], 'wb').write(requests.get(link['href']).content)

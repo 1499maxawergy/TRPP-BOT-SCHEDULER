@@ -20,10 +20,11 @@ def __init__():
     files = [f for f in os.listdir('.') if os.path.isfile(f)]
     for file in files:
         if file.endswith(".xlsx"):
-            sheet = openpyxl.load_workbook(file).active
-            for column in range(5, sheet.max_column, 5):
-                if sheet[2][column].value != "День недели":
-                    group_cell[sheet[2][column].value] = [file, column]
+            workbook = openpyxl.load_workbook(file)
+            for sheet in workbook:
+                for column in range(5, sheet.max_column, 5):
+                    if sheet[2][column].value != "День недели":
+                        group_cell[sheet[2][column].value] = [file, column, sheet.title]
 
 
 # is_group_exists() - проверка существования группы в словаре
@@ -54,12 +55,13 @@ def print_week(group_name, week):
             answer += '⚡Четная неделя\n\n'
 
         excel_filename = group_cell.get(group_name)[0]
-        sheet = openpyxl.load_workbook(excel_filename).active
+        workbook = openpyxl.load_workbook(excel_filename)
+        sheet = workbook[group_cell.get(group_name)[2]]
 
         for day in range(4, 76, 12):
             answer += "🔥" + sheet[day][0].value + '\n'
             for para in range(day + week, day + 12, 2):
-                if sheet[para][group_cell[group_name][1]].value is not None:
+                if sheet[para][group_cell[group_name][1]].value != "":
                     if sheet[para][1].value is not None:
                         answer += '№' + str(sheet[para][1].value) + '\t'
                         answer += str(sheet[para][2].value) + '\t'
@@ -70,7 +72,13 @@ def print_week(group_name, week):
                         answer += str(sheet[para - 1][3].value) + '\t'
 
                     answer += str(sheet[para][group_cell[group_name][1] + 3].value).replace('\n', '/ ') + '\n'
-                    answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
+                    if sheet[para][group_cell[group_name][1]].value is not None:
+                        answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
+                    else:
+                        n = para
+                        while sheet[n][group_cell[group_name][1]].value is None:
+                            n -= 1
+                        answer += str(sheet[n][group_cell[group_name][1]].value) + '\n\n'
             answer += '\n\n'
 
         answer += "```"
@@ -90,11 +98,12 @@ def print_day(group_name, week, day):
     if group_cell.get(group_name)[1] is not None:
         answer = "```\n"
         excel_filename = group_cell.get(group_name)[0]
-        sheet = openpyxl.load_workbook(excel_filename).active
+        workbook = openpyxl.load_workbook(excel_filename)
+        sheet = workbook[group_cell.get(group_name)[2]]
 
         answer += "🔥" + sheet[4 + 12 * (day - 1)][0].value + '\n'
         for para in range(4 + 12 * (day - 1) + week, 16 + 12 * (day - 1), 2):
-            if sheet[para][group_cell[group_name][1]].value is not None:
+            if sheet[para][group_cell[group_name][1]].value != "":
                 if sheet[para][1].value is not None:
                     answer += '№' + str(sheet[para][1].value) + '\t'
                     answer += str(sheet[para][2].value) + '\t'
@@ -105,7 +114,13 @@ def print_day(group_name, week, day):
                     answer += str(sheet[para - 1][3].value) + '\t'
 
                 answer += str(sheet[para][group_cell[group_name][1] + 3].value).replace('\n', '/ ') + '\n'
-                answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
+                if sheet[para][group_cell[group_name][1]].value is not None:
+                    answer += str(sheet[para][group_cell[group_name][1]].value) + '\n\n'
+                else:
+                    n = para
+                    while sheet[n][group_cell[group_name][1]].value is None:
+                        n -= 1
+                    answer += str(sheet[n][group_cell[group_name][1]].value) + '\n\n'
 
         answer += "```"
         return answer

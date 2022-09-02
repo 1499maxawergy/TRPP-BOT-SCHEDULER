@@ -28,5 +28,5 @@ def parse_mirea():
                 link['href'].split("/")[-1].find("III") != -1 or
                 link['href'].split("/")[-1].find("IRI") != -1 or
                 link['href'].split("/")[-1].find("ITKHT") != -1) and \
-                    link['href'].split("/")[-1].find("маг") == -1:
+                    link['href'].split("/")[-1].find("mag") == -1:
                 open(link['href'].split("/")[-1], 'wb').write(requests.get(link['href']).content)

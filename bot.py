@@ -1,17 +1,39 @@
 """Работа бота telegram через модуль pyTelegramBotAPI(telebot)"""
 import random
-
+import time
+import logging
+import sys
 import telebot
 
 import base_worker as bw
 import group_parser as pr
 import time_worker as tw
 
+logging.basicConfig(
+    level=logging.INFO,
+    handlers=[
+        logging.FileHandler("debug.log"),
+        logging.StreamHandler(sys.stdout)
+    ],
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%d-%b-%y %H:%M:%S'
+)
+
+logging.info("End of record...\n\n\n")
+logging.info("Initialization started!")
+start_time = time.perf_counter()
+
+logging.info("Group Parser initialization...")
 pr.__init__()
+
+logging.info("Base Worker initialization...")
 bw.__init__()
 
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5240599342:AAHOmtjA9_fmctqHapE66UeFfqcycJNQLlw')
+
+init_time = time.perf_counter() - start_time
+logging.info("Initialization completed! Time: " + str(init_time) + " seconds")
 
 # Inline-week-клавиатура бота
 inline_keyboard_week = telebot.types.InlineKeyboardMarkup()
@@ -44,6 +66,7 @@ def start(m):
                      + '!🤙\nЯ - бот, показывающий расписание ИИТ, ИИИ, ИРЭИ, ИТХТ в РТУ МИРЭА.'
                        '\n/help - команды для работы со мной.',
                      reply_markup=None)
+    logging.info("https://t.me/" + str(m.from_user.username) + " | New user registered")
 
 
 # Функция, обрабатывающая команду /help
@@ -59,6 +82,7 @@ def start_chatting(m):
                      '\n/week - узнать расписание на неделю.'
                      '\n/day - узнать расписание на день текущей недели.',
                      reply_markup=None)
+    logging.info("https://t.me/" + str(m.from_user.username) + " | Help requested")
 
 
 # Функция, обрабатывающая команду /profile
@@ -68,9 +92,16 @@ def start_chatting(m):
 
     Возвращает пользователю выбранную группу"""
     bw.set_username(m.chat.id, m.from_user.username)
-    bot.send_message(m.chat.id,
-                     'Привет, @' + str(m.from_user.username) + '!🖐\nВыбранная группа: ' + bw.get_group(m.chat.id),
-                     reply_markup=None)
+    group_name = bw.get_group(m.chat.id)
+    if group_name is not None:
+        bot.send_message(m.chat.id,
+                         'Привет, @' + str(m.from_user.username) + '!🖐\nВыбранная группа: ' + bw.get_group(m.chat.id),
+                         reply_markup=None)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Profile requested")
+    else:
+        bot.send_message(m.chat.id, "❗Вы не установили свою группу."
+                                    "\nСделать это можно командой /set", parse_mode='Markdown', reply_markup=None)
+        logging.warning("https://t.me/" + str(m.from_user.username) + " | Profile NOT requested (Group wasn't set)!")
 
 
 # Функция, обрабатывающая команду /set
@@ -80,6 +111,7 @@ def set_group_to_user(m):
     bw.change_activity(m.chat.id, 1)
     bw.set_username(m.chat.id, m.from_user.username)
     bot.send_message(m.chat.id, "Введите свою группу в формате XXXX-XX-XX. Регистр букв не важен.", reply_markup=None)
+    logging.info(str("https://t.me/" + m.from_user.username) + " | Set requested")
 
 
 # Функция, обрабатывающая команду /base
@@ -95,6 +127,7 @@ def check_base(m):
     else:
         bw.set_username(m.chat.id, m.from_user.username)
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
+        logging.critical("https://t.me/" + str(m.from_user.username) + " | Base requested!")
 
 
 # Функция, обрабатывающая команду /msg
@@ -110,6 +143,7 @@ def send_msg(m):
     else:
         bw.set_username(m.chat.id, m.from_user.username)
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
+        logging.critical("https://t.me/" + str(m.from_user.username) + " | MSG requested!")
 
 
 # Функция, обрабатывающая команду /time
@@ -121,6 +155,7 @@ def check_base(m):
     bw.change_activity(m.chat.id, 0)
     bw.set_username(m.chat.id, m.from_user.username)
     bot.reply_to(m, tw.get_time(), reply_markup=None)
+    logging.info("https://t.me/" + str(m.from_user.username) + " | Time requested")
 
 
 # Функция, обрабатывающая команду /week
@@ -135,9 +170,11 @@ def get_week(m):
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите неделю",
                          parse_mode='Markdown', reply_markup=inline_keyboard_week)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Week requested")
     else:
         bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown', reply_markup=None)
+        logging.warning("https://t.me/" + str(m.from_user.username) + " | Week NOT requested (Group wasn't set)!")
 
 
 # Функция, обрабатывающая команду /day
@@ -152,9 +189,11 @@ def get_day(m):
     if group_name is not None:
         bot.send_message(m.chat.id, "Выберите день текущей недели",
                          parse_mode='Markdown', reply_markup=inline_keyboard_day)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Day requested")
     else:
         bot.send_message(m.chat.id, "❗Вы не установили свою группу."
                                     "\nСделать это можно командой /set", parse_mode='Markdown')
+        logging.warning("https://t.me/" + str(m.from_user.username) + " | Day NOT requested (Group wasn't set)!")
 
 
 # Floppa
@@ -170,10 +209,12 @@ def get_floppa(m):
     if rand == 0:
         bot.send_photo(m.chat.id, "https://i.kym-cdn.com/photos/images/original/002/028/716/ef3.jpg", reply_markup=None)
         bot.send_message(m.chat.id, "Поздравляем, вам выпал Шлёппа в ванне!", reply_markup=None)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Floppa requested (Bathtube)!")
     else:
         bot.send_photo(m.chat.id, "https://memepedia.ru/wp-content/uploads/2020/10/big-floppa-meme.png",
                        reply_markup=None)
         bot.send_message(m.chat.id, "Вам выпал обычный Шлёппа. Попробуйте еще раз!", reply_markup=None)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Floppa requested (Default)!")
 
 
 # Получение сообщений от пользователя
@@ -187,12 +228,15 @@ def handle_text(m):
     bw.set_username(m.chat.id, m.from_user.username)
     if activity == 0:
         bot.send_message(m.chat.id, "Ожидаю вашей команды💤", reply_markup=None)
+        logging.info("https://t.me/" + str(m.from_user.username) + " | No command received")
     elif activity == 1:
         if pr.is_group_exists(m.text):
             bw.change_group(m.chat.id, m.text.upper())
             bot.reply_to(m, "✅Группа установлена успешно!")
+            logging.info("https://t.me/" + str(m.from_user.username) + " | Group was set")
         else:
             bot.reply_to(m, "❗Такой группы не существует.")
+            logging.warning("https://t.me/" + str(m.from_user.username) + " | Group NOT found!")
         bw.change_activity(m.chat.id, 0)
     elif activity == 2:
         users = bw.get_users()
@@ -217,14 +261,17 @@ def callback_handler(call):
                                                  tw.is_even_week_of_year())
                               , chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
+        logging.info("Current week provided")
     elif data == 'even':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id), 1)
                               , chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
+        logging.info("https://t.me/" + str(m.from_user.username) + " | Even week provided")
     elif data == 'odd':
         bot.edit_message_text(text=pr.print_week(bw.get_group(call.message.chat.id), 0)
                               , chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
+        logging.info("Odd week provided")
     elif data == 'current_day':
         if tw.get_weekday() == 7:
             text = "Сегодня воскресенье! Выходной!🎉"
@@ -232,13 +279,14 @@ def callback_handler(call):
             text = pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), tw.get_weekday())
         bot.edit_message_text(text=text, chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
+        logging.info("Current day provided")
     elif data.startswith("day"):
         day = int(data.split("-")[1])
         bot.edit_message_text(text=pr.print_day(bw.get_group(call.message.chat.id), tw.is_even_week_of_year(), day),
                               chat_id=call.message.chat.id, message_id=call.message.id,
                               parse_mode='Markdown')
+        logging.info("Day provided")
 
 
 # Запускаем бота
 bot.infinity_polling()
-# bot.polling(none_stop=True, interval=0)

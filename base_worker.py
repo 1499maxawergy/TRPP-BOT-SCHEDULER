@@ -1,13 +1,15 @@
 """Работа с базой данных PostgreSQL через модуль psycopg2"""
-import os
-
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 import group_parser
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-con = psycopg2.connect(DATABASE_URL)
+con = psycopg2.connect(
+    host="localhost",
+    database="postgres",
+    user="postgres",
+    password="123"
+)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 
@@ -21,7 +23,7 @@ def __init__():
     cursor.execute("CREATE TABLE IF NOT EXISTS users ("
                    "id serial NOT NULL PRIMARY KEY,"
                    "chat_id bigint UNIQUE NOT NULL,"
-                   "group_name VARCHAR(16),"
+                   "group_name VARCHAR(32),"
                    "activity integer,"
                    "username VARCHAR(255)"
                    ");")
